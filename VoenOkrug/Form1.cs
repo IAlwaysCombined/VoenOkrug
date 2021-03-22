@@ -13,7 +13,6 @@ namespace VoenOkrug
 {
     public partial class Form1 : Form
     {
-
         string connectionString = @"Data Source = DESKTOP-NRFOUM2\VITALIY;Initial Catalog = VoenOkr; Integrated Security = True";
 
         public Form1()
@@ -37,8 +36,6 @@ namespace VoenOkrug
 
                     using (SqlConnection connection = new SqlConnection(connectionString))
                     {
-
-
                         string sql = "SELECT * FROM Users WHERE Login = @lP AND Password = @pP";
                         connection.Open();
                         SqlCommand command = new SqlCommand(sql, connection);
@@ -46,13 +43,21 @@ namespace VoenOkrug
                         command.Parameters.Add("@pP", SqlDbType.VarChar).Value = PasswordPerson;
 
 
-
                         var Error = command.ExecuteScalar();
                         if (Error != null)
                         {
-                            Form2 form2 = new Form2();
-                            form2.Show();
-                            this.Hide();
+                            if (LoginPerson == "User1")
+                            {
+                                Form3 form3 = new Form3();
+                                form3.Show();
+                                this.Hide();
+                            }
+                            else
+                            {
+                                Form2 form2 = new Form2();
+                                form2.Show();
+                                this.Hide();
+                            }
                         }
                         else
                         {

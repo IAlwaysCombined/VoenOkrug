@@ -28,7 +28,6 @@ namespace VoenOkrug
 
         private void Form2_Load(object sender, EventArgs e)
         {
-            GetListUser();
             GetListRank();
             GetListSpeciality();
             GetListEmployee();
@@ -36,6 +35,7 @@ namespace VoenOkrug
             GetListDislocation();
             GetListMilitaryUnit();
             GetListDistribution();
+            GetListBuilding();
 
 
             //================ID Rank================//
@@ -91,84 +91,11 @@ namespace VoenOkrug
             comboBoxMilitaruUnit.DataSource = tbl6;
             comboBoxMilitaruUnit.DisplayMember = "Name_Unit";
             comboBoxMilitaruUnit.ValueMember = "ID_Unit";
+            comboBoxIDMilitaryUnit.DataSource = tbl6;
+            comboBoxIDMilitaryUnit.DisplayMember = "Name_Unit";
+            comboBoxIDMilitaryUnit.ValueMember = "ID_Unit";
             //================ID Military Unit================//
         }
-
-        //================Пользьзователь================//
-
-        //Получение данных из таблицы Users
-        void GetListUser()
-        {
-            DBConnection = new SqlConnection(connectionString);
-            DBAdapter = new SqlDataAdapter("SELECT * FROM Users ORDER BY ID_User", DBConnection);
-            DBDataSet = new DataSet();
-            DBConnection.Open();
-            DBAdapter.Fill(DBDataSet, "Users");
-            dataGridViewUsers.DataSource = DBDataSet.Tables["Users"];
-            DBConnection.Close();
-        }
-
-        //Добавление пользователя
-        private void buttonAddUser_Click(object sender, EventArgs e)
-        {
-            if (textBoxLoginUser.Text == "" && textBoxPasswordUser.Text == "")
-            {
-                MessageBox.Show("Заполните поля!");
-            }
-            else
-            {
-                DBCommand = new SqlCommand();
-                DBConnection.Open();
-                DBCommand.Connection = DBConnection;
-                DBCommand.CommandText = String.Format("INSERT INTO Users (Login, Password) values ('{0}','{1}')", textBoxLoginUser.Text, textBoxPasswordUser.Text);
-                DBCommand.ExecuteNonQuery();
-                DBConnection.Close();
-                GetListUser();
-            }
-        }
-
-        //Удаление пользователя
-        private void buttonDeleteUser_Click(object sender, EventArgs e)
-        {
-
-            if (textBoxLoginUser.Text == "")
-            {
-                MessageBox.Show("Заполните поле!");
-            }
-            else
-            {
-                DBCommand = new SqlCommand();
-                DBConnection.Open();
-                DBCommand.Connection = DBConnection;
-                DBCommand.CommandText = String.Format("DELETE FROM Users WHERE Login = '{0}'", textBoxLoginUser.Text);
-                DBCommand.ExecuteNonQuery();
-                DBConnection.Close();
-                GetListUser();
-            }
-        }
-
-        //Преобразование пользователя
-        private void buttonResetUser_Click(object sender, EventArgs e)
-        {
-            if (textBoxLoginUser.Text == "" && textBoxPasswordUser.Text == "")
-            {
-                MessageBox.Show("Заполните поля!");
-            }
-            else
-            {
-                DBCommand = new SqlCommand();
-                DBConnection.Open();
-                DBCommand.Connection = DBConnection;
-                DBCommand.CommandText = String.Format("UPDATE Users SET Login='{0}', Password='{1}' WHERE Login='{0}'", textBoxLoginUser.Text, textBoxPasswordUser.Text);
-                DBCommand.ExecuteNonQuery();
-                DBConnection.Close();
-                GetListUser();
-            }
-        }
-
-        //================Пользьзователь================//
-
-
 
         //================Служащий================//
 
@@ -387,6 +314,18 @@ namespace VoenOkrug
             DBConnection.Close();
         }
 
+        //Получение данных из таблицы Building
+        void GetListBuilding()
+        {
+            DBConnection = new SqlConnection(connectionString);
+            DBAdapter = new SqlDataAdapter("SELECT * FROM Building ORDER BY ID_Building", DBConnection);
+            DBDataSet = new DataSet();
+            DBConnection.Open();
+            DBAdapter.Fill(DBDataSet, "Building");
+            dataGridViewBuilding.DataSource = DBDataSet.Tables["Building"];
+            DBConnection.Close();
+        }
+
         //Добавление техники
         private void buttonAddEquipment_Click(object sender, EventArgs e)
         {
@@ -558,6 +497,46 @@ namespace VoenOkrug
                 DBCommand.ExecuteNonQuery();
                 DBConnection.Close();
                 GetListMilitaryUnit();
+            }
+        }
+
+        //Добавление здания
+        private void buttonAddBuilding_Click(object sender, EventArgs e)
+        {
+            if (textBoxNameBuilding.Text == "")
+            {
+                MessageBox.Show("Заполните поле!");
+            }
+            else
+            {
+                string ID_Military_Unit = comboBoxIDMilitaryUnit.SelectedValue.ToString();
+
+                DBCommand = new SqlCommand();
+                DBConnection.Open();
+                DBCommand.Connection = DBConnection;
+                DBCommand.CommandText = String.Format("INSERT INTO Building (Name_Building, Unit_ID) values ('{0}', '{1}')", textBoxNameBuilding.Text, ID_Military_Unit);
+                DBCommand.ExecuteNonQuery();
+                DBConnection.Close();
+                GetListBuilding();
+            }
+        }
+
+        //Удлаение здания
+        private void buttonDeleteBuilding_Click(object sender, EventArgs e)
+        {
+            if (textBoxNameBuilding.Text == "")
+            {
+                MessageBox.Show("Заполните поле!");
+            }
+            else
+            {
+                DBCommand = new SqlCommand();
+                DBConnection.Open();
+                DBCommand.Connection = DBConnection;
+                DBCommand.CommandText = String.Format("DELETE FROM Building WHERE Name_Building = '{0}'", textBoxNameBuilding.Text);
+                DBCommand.ExecuteNonQuery();
+                DBConnection.Close();
+                GetListBuilding();
             }
         }
 
